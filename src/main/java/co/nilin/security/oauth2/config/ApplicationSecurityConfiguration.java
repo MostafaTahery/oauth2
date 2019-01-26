@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
@@ -28,6 +29,13 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
     }
 
     @Override
+    public void configure(WebSecurity web) throws Exception {
+       /* web.ignoring()
+                .antMatchers("/","/index");*/
+       super.configure(web);
+    }
+
+    @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(authenticationProvider());
     }
@@ -37,7 +45,9 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
             httpSecurity
                     .csrf().disable()
                     .authorizeRequests()
-                    .antMatchers("/","/index","/css/*","/js/*").permitAll()
+                    .antMatchers("/admin").hasRole("ADMIN")
+                    .antMatchers("/anonymous").anonymous()
+                    .antMatchers("/", "/index", "/favicon.ico").permitAll()
                     .anyRequest().authenticated()
                     .and()
                     .httpBasic();
