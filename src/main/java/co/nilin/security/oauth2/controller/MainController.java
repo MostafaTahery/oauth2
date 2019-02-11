@@ -27,7 +27,6 @@ public class MainController {
         return String.format("Welcome Sweet Home %s", principal.getName());
     }
 
-
     @RequestMapping("/admin")
     @ResponseBody
     public String admins(){

@@ -1,6 +1,7 @@
 package co.nilin.security.oauth2.data.entity;
-
 import javax.persistence.*;
+import java.util.List;
+
 
 @Entity
 @Table(name = "USERSS")
@@ -16,6 +17,9 @@ public class User {
 
     @Column(name = "USER_PASSWORD")
     private String password;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private List<AuthGroup> authGroups;
 
     public User() {
     }
